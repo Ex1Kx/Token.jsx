@@ -1,24 +1,59 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import loginServices from './services/login'
 
-function App() {
+const  App = () => {
+  const [username , setUsername] = useState('')
+  const [password, setPassword] = useState ('')
+  const [name, setName] = useState ('')
+  const [user, setUser] = useState(null)
+  const [error, setError] = useState(null)
+
+  const handlesubmit = async (event) =>{
+    event.preventDefault()
+
+    try{
+  const user = await loginServices.login({
+      username,
+      password,
+      name
+    })
+    console.log(user)
+    setUser(user)
+    setUsername('')
+    setPassword('')
+    setName('')
+  }catch(e){
+    setError('Wrong Token') 
+  }
+}
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <form onSubmit={handlesubmit}>
+     <input
+     type='text'
+     value={username}
+     name='Username'
+     placeholder='Username'
+     onChange={(target) => setUsername(target.value)}
+     />
+    <input
+     type='password'
+     value={password}
+     name='Password'
+     placeholder='Password'
+     onChange={(target) => setPassword(target.value)}
+     />
+    <input
+     type='text'
+     value={name}
+     name='Name'
+     placeholder='Name'
+     onChange={(target) => setName(target.value)}
+     />
+     <button>
+       Login
+     </button>
+   </form>
   );
 }
 
